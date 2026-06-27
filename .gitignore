@@ -1,3 +1,6 @@
+work/output/
+work/sneakers/
+work/*.pdf
 ergebnis*.png
 smoketest*.png
 _guide.txt
