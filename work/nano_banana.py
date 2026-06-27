@@ -17,19 +17,33 @@ import sys
 
 import requests
 
-MODEL = "gemini-2.5-flash-image"
-ENDPOINT = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent"
+DEFAULT_MODEL = "gemini-2.5-flash-image"  # = Nano Banana; alt: gemini-3-pro-image (Nano Banana 2)
 
+# Prompt nach dem Casa-Riva Prompt-Engineering-Guide:
+# - Verketten statt stapeln: 1. Bild = eingefrorener Szenen-Anker, nur EINE neue Variable (der Schuh)
+# - "study ... do not idealize/beautify/average" -> Produkt exakt reproduzieren
+# - Anti-Cinematic: keine Quality-Woerter; muted natural colors
+# - Modus B (Produkt ist der Star): Schuh immer scharf & sauber ausgeleuchtet,
+#   Imperfektionen NUR auf Licht/Hintergrund, NIEMALS auf den Schuh
 DEFAULT_PROMPT = (
-    "Use the FIRST image as a fixed scene template and the SECOND image as the new product. "
-    "Recreate the first image EXACTLY: the same vintage Persian/Oriental rug, the same colors, "
-    "the same soft top-down studio lighting, the same vertical 9:16 framing, and the same composition "
-    "of two shoes -- one shoe photographed from directly above (top-down) on the left, and the other "
-    "shoe shown from the side on the right. "
-    "Replace ONLY the shoes with the shoe shown in the second image. Keep the new shoe's exact design, "
-    "materials, colors, logos and proportions faithful to the product photo. "
-    "Do not change the rug, background, lighting, camera angle or layout. Photorealistic, high detail, "
-    "clean e-commerce / TikTok product-show look. Output a single 9:16 vertical image."
+    "The FIRST image is a fixed scene template. The SECOND image is the new product (a shoe). "
+    "Carefully study the second image before generating. Analyze and exactly reproduce the shoe's "
+    "specific design: the precise colors and color blocking, the materials and textures (leather, "
+    "suede, mesh, rubber), the sole shape and color, the stitching, the laces, and any logos, "
+    "branding or details. Do not idealize, beautify, average or restyle the shoe -- it must be "
+    "recognizable as the exact same product from the reference. "
+    "Recreate the first image exactly: keep the identical vintage Persian/Oriental rug, the same "
+    "rug colors and pattern, the same soft even top-down daylight, the same vertical 9:16 framing, "
+    "and the same layout of two shoes -- one shoe seen from directly above (top-down) on the upper "
+    "left, the other shoe shown from the side, heel toward upper-right. "
+    "Replace ONLY the shoes with the shoe from the second image; both shown shoes are this same model. "
+    "Do not change the rug, background, camera angle, shadows or composition. "
+    "The shoe stays sharp and clearly in focus, materials and details crisp, well-lit and flattering, "
+    "colors true to the product. Any softness or imperfection belongs only to the background, never "
+    "to the shoe. "
+    "Muted, natural, restrained colors. An ordinary clean product photo, not staged, not a studio "
+    "shoot, not cinematic. No film grain, no color grading, no text, no watermark. "
+    "Output a single vertical 9:16 image."
 )
 
 
@@ -44,9 +58,10 @@ def load_part(path):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--shoe", required=True, help="Neues Schuh-Produktfoto")
+    ap.add_argument("--shoe", required=True, nargs="+", help="Neues Schuh-Produktfoto (mehrere = mehr Winkel)")
     ap.add_argument("--reference", default=os.path.join(os.path.dirname(__file__), "reference.png"))
     ap.add_argument("--out", default="ergebnis.png")
+    ap.add_argument("--model", default=DEFAULT_MODEL)
     ap.add_argument("--prompt", default=DEFAULT_PROMPT)
     args = ap.parse_args()
 
@@ -54,24 +69,22 @@ def main():
     if not api_key:
         sys.exit("Fehler: GEMINI_API_KEY (oder GOOGLE_API_KEY) ist nicht gesetzt.")
 
+    endpoint = f"https://generativelanguage.googleapis.com/v1beta/models/{args.model}:generateContent"
+    parts = [{"text": args.prompt}, load_part(args.reference)]
+    for shoe in args.shoe:
+        parts.append(load_part(shoe))
     body = {
-        "contents": [{
-            "parts": [
-                {"text": args.prompt},
-                load_part(args.reference),
-                load_part(args.shoe),
-            ]
-        }],
+        "contents": [{"parts": parts}],
         # 9:16 hochformat fuer TikTok
         "generationConfig": {"imageConfig": {"aspectRatio": "9:16"}},
     }
 
-    resp = requests.post(
-        ENDPOINT,
-        headers={"x-goog-api-key": api_key, "Content-Type": "application/json"},
-        data=json.dumps(body),
-        timeout=180,
-    )
+    headers = {"x-goog-api-key": api_key, "Content-Type": "application/json"}
+    resp = requests.post(endpoint, headers=headers, data=json.dumps(body), timeout=180)
+    # Fallback: aeltere Modelle kennen imageConfig nicht
+    if resp.status_code == 400 and "imageConfig" in resp.text:
+        body["generationConfig"].pop("imageConfig", None)
+        resp = requests.post(endpoint, headers=headers, data=json.dumps(body), timeout=180)
     if resp.status_code != 200:
         sys.exit(f"API-Fehler {resp.status_code}: {resp.text[:1000]}")
 
