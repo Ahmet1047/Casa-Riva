@@ -46,6 +46,21 @@ DEFAULT_PROMPT = (
     "Output a single vertical 9:16 image."
 )
 
+# Recolor-Modus: 1. Bild = bereits korrekte Szene+Schuhform, 2. Bild = Farb-/Material-Referenz.
+# Nur Farbe/Material wird getauscht, die Form bleibt exakt erhalten.
+RECOLOR_PROMPT = (
+    "The FIRST image is a finished, correct scene: two identical sneakers on a vintage rug, one shown "
+    "top-down and one from the side. Keep its composition, layout, rug, lighting, shadows, shoe SHAPE "
+    "and proportions, and 9:16 framing exactly as they are -- do not change the shape or arrangement. "
+    "The SECOND image is a color/material reference. Carefully study it and recolor BOTH sneakers in "
+    "the first image to exactly match that shoe: the same suede upper color and texture, the same sole "
+    "color, the same laces, toe cap and details. Change ONLY the colors and materials, nothing about "
+    "the shape, pose or scene. "
+    "The shoe stays sharp and in focus, materials crisp, well-lit, colors true to the reference. "
+    "Plain insole with NO text and NO logo. Muted natural colors, not cinematic, no watermark, no text. "
+    "Output a single vertical 9:16 image."
+)
+
 
 def load_part(path):
     mime, _ = mimetypes.guess_type(path)
@@ -62,8 +77,12 @@ def main():
     ap.add_argument("--reference", default=os.path.join(os.path.dirname(__file__), "reference.png"))
     ap.add_argument("--out", default="ergebnis.png")
     ap.add_argument("--model", default=DEFAULT_MODEL)
-    ap.add_argument("--prompt", default=DEFAULT_PROMPT)
+    ap.add_argument("--mode", choices=["swap", "recolor"], default="swap",
+                    help="swap = neuen Schuh in die Szene; recolor = Form behalten, nur umfaerben")
+    ap.add_argument("--prompt", default=None)
     args = ap.parse_args()
+    if args.prompt is None:
+        args.prompt = RECOLOR_PROMPT if args.mode == "recolor" else DEFAULT_PROMPT
 
     api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
     if not api_key:
