@@ -63,12 +63,28 @@ RECOLOR_PROMPT = (
 
 
 def load_part(path):
-    mime, _ = mimetypes.guess_type(path)
-    if mime is None:
-        mime = "image/png"
-    with open(path, "rb") as f:
-        data = base64.b64encode(f.read()).decode()
-    return {"inline_data": {"mime_type": mime, "data": data}}
+    # URL oder lokaler Pfad -> beides wird unterstuetzt
+    if path.startswith("http://") or path.startswith("https://"):
+        r = requests.get(path, timeout=60)
+        r.raise_for_status()
+        raw = r.content
+        mime = r.headers.get("Content-Type", "image/jpeg").split(";")[0]
+    else:
+        mime, _ = mimetypes.guess_type(path)
+        mime = mime or "image/png"
+        with open(path, "rb") as f:
+            raw = f.read()
+    return {"inline_data": {"mime_type": mime, "data": base64.b64encode(raw).decode()}}
+
+
+def make_preview(png_path):
+    """Leichte JPG-Variante fuer den Versand (kleiner, gleiche Optik)."""
+    from PIL import Image
+    im = Image.open(png_path).convert("RGB")
+    im.thumbnail((1280, 1280))
+    jpg = os.path.splitext(png_path)[0] + ".jpg"
+    im.save(jpg, "JPEG", quality=85, optimize=True)
+    return jpg
 
 
 def main():
@@ -114,7 +130,9 @@ def main():
         if inline and inline.get("data"):
             with open(args.out, "wb") as f:
                 f.write(base64.b64decode(inline["data"]))
+            jpg = make_preview(args.out)
             print(f"Gespeichert: {args.out}")
+            print(f"Preview (klein): {jpg}")
             return
     sys.exit(f"Kein Bild in der Antwort. Roh-Antwort: {json.dumps(data)[:1000]}")
 
