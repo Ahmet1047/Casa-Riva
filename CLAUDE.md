@@ -26,8 +26,16 @@ nicht im Code oder hier verstreuen.
 ## Die wichtigsten Regeln in einem Satz
 Eine eingefrorene Szene + EINE neue Variable; Produkt exakt reproduzieren statt
 verschönern; Feature-by-Feature beschreiben; nicht cinematic; Schuh immer scharf;
-beide Schuhe exakt gleich groß; Negatives mit Position benennen (z. B. **kein
+beide Schuhe exakt gleich groß **und ein identisches Modell (kein Warping, keine
+zwei verschiedenen Schuhe)**; Negatives mit Position benennen (z. B. **kein
 Stern unten rechts**). Details: `work/KNOWLEDGE_BASE.md`.
+
+## Arbeitsregel: immer aus dem Output lernen
+Nach **jeder** Bildgenerierung den Output analysieren, gegen die Prinzipien
+P1–P8 prüfen und bei Fehlern **die Prompt-Architektur, `work/KNOWLEDGE_BASE.md`
+und diese Datei verbessern** — nicht nur das Bild neu würfeln. Bei Warping oder
+„zwei verschiedene Schuhe": beide echten Ansichten (Top-down **und** Seite) als
+Referenz mitgeben (Zwei-Ansichten-Swap, P8).
 
 ## Git
 Auf dem aktuellen Feature-Branch entwickeln, committen und pushen. Keinen PR

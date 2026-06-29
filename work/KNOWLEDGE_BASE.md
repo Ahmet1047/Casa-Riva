@@ -80,6 +80,22 @@ Ebenso: kein Schuhkarton, keine Hände, kein Text, kein Logo, kein Wasserzeichen
 Explizit wiederholen, sonst werden die zwei Schuhe ungleich gerendert:
 > „BOTH shoes EXACTLY THE SAME SIZE … BOTH pointing in the SAME direction."
 
+### P8 — Geometrie-/Identitäts-Lock (kein Warping, EIN Modell)
+Häufigster Fehler: die zwei Schuhe **warpen** (verzogene Geometrie) oder werden
+zu **zwei verschiedenen Schuhen**. Beide sind aber **ein einziges identisches
+Modell aus zwei Blickwinkeln**. Immer erzwingen:
+> „Both shoes are ONE single identical model … preserve the exact geometry …
+> do NOT warp, stretch, melt, deform or redraw them, do NOT make two different shoes."
+
+**Stärkstes Gegenmittel — Zwei-Ansichten-Referenz:** Wenn vorhanden, **beide
+echten Ansichten** des Schuhs mitgeben (Top-down **und** Seitenprofil). Dann
+bekommt jede Position ihre korrekte Geometrie:
+- 1. Bild = Szenen-Anker (Teppich/Layout/Licht/9:16),
+- 2. Bild = Schuh **top-down** → wird der linke Schuh,
+- 3. Bild = Schuh **Seitenprofil** → wird der rechte Schuh.
+Damit verschwinden Warping und „zwei verschiedene Schuhe" zuverlässig (so wurde
+die Navy-Show korrekt erzeugt). Aufruf-Beispiel siehe Abschnitt 5.
+
 ---
 
 ## 3. Prompt-Bauplan (Schema)
@@ -160,6 +176,16 @@ Vertical 9:16 framing.
 4. Für jedes neue Modell eine **eigene Prompt-Datei** unter `prompts/` anlegen
    (siehe `num_base.txt`, `valentino.txt` als Vorlagen).
 
+**Bei Warping / zwei verschiedenen Schuhen → Zwei-Ansichten-Swap (P8):**
+Beide echten Ansichten als Referenz mitgeben (Top-down zuerst, dann Seite):
+```bash
+python3 nano_banana.py --mode swap \
+  --reference inputs/scene_rug.png \
+  --shoe inputs/<modell>_top.jpeg inputs/<modell>_side.jpeg \
+  --out output/<modell>.png
+```
+Das fixt Geometrie und Schuh-Identität deutlich besser als ein reiner Recolor.
+
 ### Technik-Defaults (Zuverlässigkeit)
 - Modell: `gemini-2.5-flash-image` (Nano Banana). Schärfer: `--model gemini-3-pro-image`.
 - Format wird über `imageConfig.aspectRatio: "9:16"` erzwungen (mit Auto-Fallback
@@ -180,3 +206,16 @@ Vertical 9:16 framing.
 | Bild wirkt wie Studio/Werbung | Quality-Buzzwords | Anti-Cinematic-Wording, gedämpfte Farben (P4) |
 | Recolor ändert auch die Form | Anker nicht eingefroren | Im Recolor-Prompt „Change ONLY …" + behaltene Teile listen |
 | Form/Layout instabil über Varianten | aus Produktfoto statt Basis gerendert | Varianten immer per `--mode recolor` aus korrekter Basis |
+| Schuhe **warpen** / verzogene Geometrie | Recolor zeichnet Schuh neu | Geometrie-Lock (P8): „preserve exact geometry, do not warp/redraw" |
+| **Zwei verschiedene Schuhe** statt einem Modell | nur eine Ansicht als Referenz | Zwei-Ansichten-Swap (P8): Top-down **und** Seite mitgeben |
+| Nur EIN Schuh wird umgefärbt | „BOTH" fehlt | explizit „recolor BOTH shoes … both to <Farbe>" |
+
+---
+
+## 7. Arbeitsregel (immer)
+
+**Nach jeder Generierung den Output analysieren**, gegen die Prinzipien P1–P8
+prüfen, und bei Abweichungen **die Prompt-Architektur (Skripte/Prompts), diese
+Knowledge Base UND `CLAUDE.md` verbessern** — nicht nur das Einzelbild neu
+würfeln. So werden die Prompts mit jeder Iteration besser statt den gleichen
+Fehler zu wiederholen.
