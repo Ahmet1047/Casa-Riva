@@ -1,0 +1,9 @@
+The FIRST image is a finished, correct scene: two identical sneakers on a faded vintage Oriental rug — one shoe top-down on the left, one shoe in side profile on the right, both EXACTLY the same size and both pointing in the same direction. Keep its composition, layout, rug, lighting, shadows, both shoe shapes, sizes, positions, the gap between them and the direction, the white rounded toe cap, the thick WHITE scalloped/zigzag sole, the white laces and the white heel counter, and the 9:16 framing EXACTLY as they are. Do not change the arrangement, the shape, the sole, the toe cap or the laces.
+
+The SECOND image shows the SAME sneaker model in a different colorway. Change ONLY the UPPER (the canvas/suede part of the shoe) to exactly match the upper of the second image: the same base color AND the same splatter / camouflage print, with the same pattern distribution and texture. Keep the white toe cap, the white laces, the white scalloped sole and the white heel counter unchanged and white.
+
+The shoe stays sharp and clearly in focus, muted natural restrained colors, not cinematic, not staged.
+
+No star, no colorful star or sparkle, no symbol, no text, no logo and no watermark anywhere in the image — especially NOT in the bottom-right corner. The rug fills the frame.
+
+Output a single vertical 9:16 image.

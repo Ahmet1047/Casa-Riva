@@ -1,0 +1,9 @@
+The FIRST image is a finished, correct scene: two identical white Valentino Open sneakers on a faded vintage Oriental rug — one shoe top-down on the left, one shoe in side profile on the right, both EXACTLY the same size and both pointing in the same direction. Keep its composition, layout, rug, lighting, shadows, both shoe shapes, sizes, positions, the gap between them and the direction, and the 9:16 framing EXACTLY as they are. Do not change the arrangement or the shape/size of the shoes.
+
+The SECOND image shows the SAME sneaker model in a BLACK colorway. Change ONLY the color of the wide diagonal band across the midfoot (the band with the two open oval eyelets) and the small heel detail from navy-blue to solid BLACK, matching the second image. Everything else stays exactly the same: bright white leather upper, white laces, thick CREAM / off-white rubber cupsole with the row of small pyramid studs along the side edge, white outsole.
+
+The shoe stays sharp and clearly in focus, the leather and studded sole crisp. Muted, natural, restrained colors, not cinematic, not staged.
+
+No star, no colorful star or sparkle, no symbol, no text, no logo and no watermark anywhere in the image — especially NOT in the bottom-right corner. The rug is plain patterned vintage rug only and fills the frame.
+
+Output a single vertical 9:16 image.
