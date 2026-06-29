@@ -176,15 +176,20 @@ Vertical 9:16 framing.
 4. Für jedes neue Modell eine **eigene Prompt-Datei** unter `prompts/` anlegen
    (siehe `num_base.txt`, `valentino.txt` als Vorlagen).
 
-**Bei Warping / zwei verschiedenen Schuhen → Zwei-Ansichten-Swap (P8):**
-Beide echten Ansichten als Referenz mitgeben (Top-down zuerst, dann Seite):
+**Bei Warping / zwei verschiedenen Schuhen → recolor + Zwei-Ansichten (P8/P9):**
+**Immer `--mode recolor`** verwenden — der friert die exakte Anordnung des
+Anker-Bildes ein. Beide echten Ansichten (Top-down + Seite) nur als **Farb-/
+Material-Referenz** mitgeben, plus expliziten Anordnungs-Satz im Prompt:
 ```bash
-python3 nano_banana.py --mode swap \
+python3 nano_banana.py --mode recolor \
   --reference inputs/scene_rug.png \
   --shoe inputs/<modell>_top.jpeg inputs/<modell>_side.jpeg \
   --out output/<modell>.png
 ```
-Das fixt Geometrie und Schuh-Identität deutlich besser als ein reiner Recolor.
+> **Wichtig (P9): `--mode swap` NICHT für Anordnungstreue benutzen.** Swap
+> komponiert die Szene frei neu und zieht die Schuhe oft diagonal auseinander.
+> Für „exakt wie das Referenzbild" ist recolor Pflicht; die zwei Ansichten lösen
+> Warping/Identität, der eingefrorene Anker löst die Platzierung.
 
 ### Technik-Defaults (Zuverlässigkeit)
 - Modell: `gemini-2.5-flash-image` (Nano Banana). Schärfer: `--model gemini-3-pro-image`.
@@ -209,6 +214,7 @@ Das fixt Geometrie und Schuh-Identität deutlich besser als ein reiner Recolor.
 | Schuhe **warpen** / verzogene Geometrie | Recolor zeichnet Schuh neu | Geometrie-Lock (P8): „preserve exact geometry, do not warp/redraw" |
 | **Zwei verschiedene Schuhe** statt einem Modell | nur eine Ansicht als Referenz | Zwei-Ansichten-Swap (P8): Top-down **und** Seite mitgeben |
 | Nur EIN Schuh wird umgefärbt | „BOTH" fehlt | explizit „recolor BOTH shoes … both to <Farbe>" |
+| Schuhe **falsch angeordnet** / diagonal auseinandergezogen | `swap` komponiert frei | **`--mode recolor`** nutzen (friert Anker-Anordnung ein) + Platzierungs-Satz (P9) |
 
 ---
 

@@ -35,7 +35,8 @@ Nach **jeder** Bildgenerierung den Output analysieren, gegen die Prinzipien
 P1–P8 prüfen und bei Fehlern **die Prompt-Architektur, `work/KNOWLEDGE_BASE.md`
 und diese Datei verbessern** — nicht nur das Bild neu würfeln. Bei Warping oder
 „zwei verschiedene Schuhe": beide echten Ansichten (Top-down **und** Seite) als
-Referenz mitgeben (Zwei-Ansichten-Swap, P8).
+Farbreferenz mitgeben. **Für Anordnungstreue immer `--mode recolor`** (friert die
+Anordnung des Anker-Bildes ein); `--mode swap` zieht die Schuhe frei auseinander (P9).
 
 ## Git
 Auf dem aktuellen Feature-Branch entwickeln, committen und pushen. Keinen PR
