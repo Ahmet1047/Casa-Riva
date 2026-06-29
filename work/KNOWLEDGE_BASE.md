@@ -1,9 +1,22 @@
 # Casa-Riva Bild-Knowledge-Base
 
 Zentrale Sammlung aller Erkenntnisse, um mit **Nano Banana / Gemini Image**
-(Google Generative Language API) zuverlässig gute Casa-Riva-Schuh-Shows zu
-erzeugen. Diese Datei ist die Single Source of Truth für Prompts und Workflow.
-Bei neuen Lerneffekten: hier ergänzen, nicht im Code verstreuen.
+zuverlässig gute Casa-Riva-Schuh-Shows zu erzeugen. Diese Datei ist die Single
+Source of Truth für Prompts und Workflow. Bei neuen Lerneffekten: hier ergänzen,
+nicht im Code verstreuen.
+
+## Provider: fal.ai (Standard)
+Bildgenerierung läuft über **fal.ai** (Modell `fal-ai/nano-banana/edit`, Gemini
+Image mit mehreren Referenzbildern). Key kommt aus `FAL_KEY`.
+- Script: `work/fal_banana.py` (gleicher Look, gleiche Modi wie unten).
+- GitHub Actions: `.github/workflows/generate-shoes.yml` nutzt das Repo-Secret
+  `FAL_KEY` und lädt die Bilder als Artifact hoch.
+- Direkter Google-API-Weg (`work/nano_banana.py`, `GEMINI_API_KEY`) bleibt als
+  Alternative bestehen.
+
+**Wichtig:** Ein GitHub-Secret ist nur im Actions-Lauf verfügbar, NICHT in einer
+Claude-Code-Web-Session. Für lokale Generierung muss `FAL_KEY` als Env-Variable
+in der jeweiligen Umgebung gesetzt sein.
 
 ---
 

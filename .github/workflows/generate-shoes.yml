@@ -1,0 +1,49 @@
+name: Generate Casa-Riva shoe shows
+
+# Erzeugt die Schuh-Shows über fal.ai. Der Key kommt aus dem Repo-Secret FAL_KEY.
+# Manuell starten: Actions -> "Generate Casa-Riva shoe shows" -> Run workflow.
+on:
+  workflow_dispatch:
+    inputs:
+      colors:
+        description: "Welche Farben (Komma-getrennt: navy,grey,black)"
+        default: "navy,grey,black"
+        required: true
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: pip install requests
+
+      - name: Generate images
+        env:
+          FAL_KEY: ${{ secrets.FAL_KEY }}
+        working-directory: work
+        run: |
+          if [ -z "$FAL_KEY" ]; then
+            echo "::error::Repo-Secret FAL_KEY ist nicht gesetzt (Settings -> Secrets -> Actions)."; exit 1
+          fi
+          mkdir -p output
+          IFS=',' read -ra COLORS <<< "${{ github.event.inputs.colors }}"
+          for c in "${COLORS[@]}"; do
+            c="$(echo "$c" | xargs)"   # trim
+            echo "=== $c ==="
+            python3 fal_banana.py --mode recolor \
+              --scene inputs/scene_rug.png \
+              --shoe "inputs/shoe_${c}.jpeg" \
+              --out "output/show_${c}.png"
+          done
+
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: casa-riva-shows
+          path: work/output/*.png

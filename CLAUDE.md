@@ -14,8 +14,12 @@ Neue Erkenntnisse über gute Bilder **immer in `work/KNOWLEDGE_BASE.md` ergänze
 nicht im Code oder hier verstreuen.
 
 ## Schnell-Orientierung
-- Generator: `work/nano_banana.py` (Modi: `--mode swap` = neue Show/Produkt,
-  `--mode recolor` = nur Farbe/Material tauschen).
+- **Provider: fal.ai** (Standard). Generator `work/fal_banana.py`, Key aus `FAL_KEY`.
+  GitHub-Workflow: `.github/workflows/generate-shoes.yml` (nutzt Secret `FAL_KEY`).
+- Alternative: `work/nano_banana.py` (direkte Google-API, `GEMINI_API_KEY`).
+- Modi bei beiden: `--mode swap` = neue Show/Produkt, `--mode recolor` =
+  nur Farbe/Material tauschen.
+- Eingabebilder: `work/inputs/` (Szenen-Anker `scene_rug.png` + Schuh-Referenzen).
 - Modell-Prompts: `work/prompts/*.txt` (pro Modell eine Datei).
 - Szenen-Anker: `work/reference.png` (Vintage-Teppich + Anordnung).
 
