@@ -1,0 +1,20 @@
+The FIRST image is a fixed scene template. The SECOND and THIRD images are product photos of ONE sneaker (two angles of the same shoe).
+
+Carefully study the product images before generating. Analyze and exactly reproduce these specific details of the shoe — do not idealize, beautify, average or restyle it; it must be recognizable as this exact product:
+- Upper: bright clean WHITE smooth calfskin leather, low-top sneaker shape with a rounded toe.
+- Signature band: ONE wide DIAGONAL band of dark NAVY-BLUE smooth leather running across the lacing area / midfoot. On this navy band there are TWO open oval lace-eyelets. The band is the dominant feature — keep its navy color, width, diagonal angle and the two eyelets exactly.
+- Laces: thin WHITE round laces, mostly hidden under the navy band, only slightly visible near the toe and at the top.
+- Tongue: low white padded leather tongue.
+- Heel: white heel counter with a small navy-blue painted detail/tab at the back.
+- Sole: thick CREAM / off-white rubber cupsole. The side edge of the sole has a row of small tonal PYRAMID STUDS (Rockstud) running along it — reproduce this studded sole edge. Flat white outsole underneath.
+- Keep stitching, proportions and all colors true to the product photos.
+
+Recreate the FIRST image exactly: keep the identical vintage Persian/Oriental rug, the same rug colors and pattern, the same soft even top-down daylight, the same shadows, the same vertical 9:16 framing, and the same layout of two shoes — one shoe seen from directly above (top-down) on the upper left, the other shoe shown from the side, heel toward the upper-right. Both shoes are this same Valentino Open model.
+
+Do not change the rug, background, camera angle, shadows or composition. The shoe stays sharp and clearly in focus, the leather and the studded sole crisp and well-lit, colors true to the product. Any softness belongs only to the background, never to the shoe.
+
+Muted, natural, restrained colors. An ordinary clean product photo, not staged, not a studio shoot, not cinematic. No film grain, no color grading.
+
+IMPORTANT cleanup: no logos, no text, no watermark, and NO star, NO star-shaped motif and NO added symbol anywhere in the image — especially NOT in the bottom-right corner. The rug must be plain, with no added emblem or graphic.
+
+Output a single vertical 9:16 image.

@@ -96,9 +96,18 @@ def main():
     ap.add_argument("--mode", choices=["swap", "recolor"], default="swap",
                     help="swap = neuen Schuh in die Szene; recolor = Form behalten, nur umfaerben")
     ap.add_argument("--prompt", default=None)
+    ap.add_argument("--prompt-file", dest="prompt_file", default=None,
+                    help="Pfad zu einer Datei mit dem vollstaendigen Prompt (ueberschreibt --prompt)")
+    ap.add_argument("--details", default=None,
+                    help="Zusatztext, der an den Basis-Prompt angehaengt wird (schuh-spezifische Details)")
     args = ap.parse_args()
-    if args.prompt is None:
+    if args.prompt_file:
+        with open(args.prompt_file, encoding="utf-8") as f:
+            args.prompt = f.read()
+    elif args.prompt is None:
         args.prompt = RECOLOR_PROMPT if args.mode == "recolor" else DEFAULT_PROMPT
+    if args.details:
+        args.prompt = args.prompt + "\n\n" + args.details
 
     api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
     if not api_key:
