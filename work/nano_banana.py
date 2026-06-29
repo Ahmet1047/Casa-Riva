@@ -100,6 +100,8 @@ def main():
                     help="Pfad zu einer Datei mit dem vollstaendigen Prompt (ueberschreibt --prompt)")
     ap.add_argument("--details", default=None,
                     help="Zusatztext, der an den Basis-Prompt angehaengt wird (schuh-spezifische Details)")
+    ap.add_argument("--ref-last", dest="ref_last", action="store_true",
+                    help="Schuh-Fotos zuerst, Teppich-Referenz zuletzt (Identitaet zuerst)")
     args = ap.parse_args()
     if args.prompt_file:
         with open(args.prompt_file, encoding="utf-8") as f:
@@ -114,9 +116,14 @@ def main():
         sys.exit("Fehler: GEMINI_API_KEY (oder GOOGLE_API_KEY) ist nicht gesetzt.")
 
     endpoint = f"https://generativelanguage.googleapis.com/v1beta/models/{args.model}:generateContent"
-    parts = [{"text": args.prompt}, load_part(args.reference)]
-    for shoe in args.shoe:
-        parts.append(load_part(shoe))
+    # Reihenfolge: --ref-last => erst Schuh-Fotos, dann Teppich (Identitaet zuerst)
+    parts = [{"text": args.prompt}]
+    shoe_parts = [load_part(s) for s in args.shoe]
+    ref_part = load_part(args.reference)
+    if args.ref_last:
+        parts += shoe_parts + [ref_part]
+    else:
+        parts += [ref_part] + shoe_parts
     body = {
         "contents": [{"parts": parts}],
         # 9:16 hochformat fuer TikTok
