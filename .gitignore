@@ -1,0 +1,9 @@
+work/output/
+work/sneakers/
+work/*.pdf
+ergebnis*.png
+smoketest*.png
+_guide.txt
+*.out.png
+__pycache__/
+.env
